@@ -1,0 +1,25 @@
+{
+    "AS1":{
+        "name":111,
+        "ipv6_prefix":"2001:0:1::/48",
+        "routers":{
+            "R1":{
+                "interfaces":{
+                    "GigabitEthernet1/0":{
+                        "neighbor":"R2",
+                        "protocol":"OSPF"
+                    },
+                    "GigabitEthernet2/0":{
+                        "neighbor":"R3",
+                        "protocol":"OSPF"
+                    },
+                    "FastEthernet0/0":{
+                        "neighbor":"R4",
+                        "protocol":"eBGP"
+                    }
+                }
+            }           
+        }
+    }
+}
+

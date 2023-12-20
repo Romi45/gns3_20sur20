@@ -1,0 +1,82 @@
+POUR RIP :
+
+enable
+configure terminal
+	ipv6 unicast-routing
+	ipv6 router rip NOM_PROCESS
+		redistribute connected
+		exit
+	interface GigabitEthernet1/0
+		ipv6 enable
+		ipv6 address ADRESSE/PREFIXE
+		no shutdown
+		ipv6 rip NOM_PROCESS enable
+
+POUR OSPF :
+
+enable
+configure terminal
+	ipv6 unicast-routing
+	ipv6 router ospf NOM_PROCESS
+		router-id ROUTER_ID
+		exit
+	interface GigabitEthernet1/0
+		ipv6 enable
+		ipv6 address ADRESSE/PREFIXE
+		no shutdown
+		ipv6 ospf NOM_PROCESS area NOM_AREA
+
+
+iBGP avec loopback en RIP
+enable
+conf t
+	interface Loopback0
+		ipv6 enable
+		ipv6 address 2001:db8::ID_ROUTER/128
+		ipv6 rip NOM_PROCESS enable
+		exit
+	router bgp ID_AS
+		bgp router-id 1.1.1.1
+		neighbor LOOPBACK_VOISIN1 remote-as ID_AS
+		neighbor LOOPBACK_VOISIN2 remote-as ID_AS
+		...
+		neighbor LOOPBACK_VOISIN1 update-source Loopback0
+		neighbor LOOPBACK_VOISIN2 update-source Loopback0
+		address-family ipv6 unicast
+			neighbor LOOPBACK_VOISIN1 activate
+			neighbor LOOPBACK_VOISIN2 activate
+
+iBGP avec loopback en OSPF
+enable
+conf t
+	interface Loopback0
+		no shutdown
+		ipv6 enable
+		ipv6 address 2001:db8::ID_ROUTER/128
+		ipv6 ospf NOM_PROCESS area 0 ( backbone pour l'instant )
+		exit
+	router bgp ID_AS
+		bgp router-id 1.1.1.1
+		neighbor LOOPBACK_VOISIN1 remote-as ID_AS
+		neighbor LOOPBACK_VOISIN2 remote-as ID_AS
+		...
+		neighbor LOOPBACK_VOISIN1 update-source Loopback0
+		neighbor LOOPBACK_VOISIN2 update-source Loopback0
+		address-family ipv6 unicast
+			neighbor LOOPBACK_VOISIN1 activate
+			neighbor LOOPBACK_VOISIN2 activate
+	
+
+eBGP sur les bordures :
+enable
+configure terminal
+	router bgp AS_NUMBER
+	no bgp default ipv4-unicast
+	bgp router-id 3.3.3.3
+	neighbor IP_VOISIN remote-as AS_VOISIN
+	address-family ipv6 unicast
+		neighbor IP_VOISIN activate
+
+
+
+

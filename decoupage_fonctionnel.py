@@ -4,7 +4,7 @@ def telnet_to_node(config, node):
     """
     params: node object, config ==> list of commands for the config, result of generate_config 
 
-    sends msg to node with \r btwn lines
+    sends commands to node with \r btwn lines
 
     returns: 0 if everything okay, -1 and error otherwise
     """

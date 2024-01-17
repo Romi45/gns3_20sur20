@@ -137,22 +137,5 @@ with open('/Users\jeand\OneDrive\Documentos\INSA_Cours\TC\GNS3\intent_file.json'
             config_string += bgpconf(as_content['as_number'],router_content['Router_ID'],loopback_dict[as_name],ebgp, router_content['advertised_networks'])
 
             telnet_to_node(config_string.encode(), nodes_info[router])
-
-        """elif as_content['IGP']=='OSPF':
-            print(as_number + " OSPF")
-            for router, router_content in as_content['routers'].items():
-                #setup_ospf_router(router_content['Router_ID'])
-                config_string = b""
-                config_string = setup_ospf(router_content['Router_ID'])
-                loopback_dict[as_number].append(router_content['interfaces']['Loopback0']['ipv6_address'])
-                print(router)
-
-                for interface, interface_content in router_content['interfaces'].items():
-                    #setup_ospf_interface(interface, interface_content['ipv6_address], interface_content['ospf_area])
-                    config_string += ospfconf(interface, interface_content['ipv6_address'], (str(interface_content['ospf_area'])))
-                    print(config_string)
-
-                telnet_to_node(config_string, nodes_info[router])
-"""
                 
 print(loopback_dict)

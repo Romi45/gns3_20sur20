@@ -26,15 +26,19 @@ def telnet_to_node(config, port):
 
 
 def retrieve_nodes(project_name):
-    #tested, works as expected
+
     server = Gns3Connector("http://localhost:3080")
+
     lab = Project(name=project_name, connector=server)
+    
     lab.get()
     lab.open()
+
     for node in lab.nodes:
         node.get()
         nodes_info[node.name] = node.console
-    
+
+
 
 
 def ripconf(interface,adresse_ip):
@@ -78,7 +82,7 @@ def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks):
     return bgp_string
 
 
-retrieve_nodes("test_proj")
+retrieve_nodes("config_auto_projet")
 print(nodes_info)
 
 
@@ -87,55 +91,67 @@ loopback_dict = {}
 igp_type = ['RIP', 'OSPF']
 igp = 0 #vaut 0 pour RIP, 1 pour OSPF
 
-with open('/Users\jeand\OneDrive\Documentos\INSA_Cours\TC\GNS3\intent_file.json') as json_file:
+import json
+import os
+
+
+
+
+with open('intent_file.json') as json_file:
     data = json.load(json_file)
+
+
+    for router, router_content in data.items():
+
+        if router_content['as_number'] in loopback_dict:
+            loopback_dict[router_content['as_number']].append((router_content['interfaces']['Loopback0']['ipv6_address']).replace('/128',''))
+            
+        else:
+            loopback_dict[router_content['as_number']]=[(router_content['interfaces']['Loopback0']['ipv6_address']).replace('/128','')]
     
+    for router, router_content in data.items():
 
-    #IGP
-    for as_name, as_content in data.items():
-        loopback_dict[as_name] = []
+        as_number=router_content['as_number']
 
-        if as_content['IGP']=='OSPF':
-            igp = 1
-        print(as_name + igp_type[igp])
-        for router, router_content in as_content['routers'].items():
-            loopback_dict[as_name].append((router_content['interfaces']['Loopback0']['ipv6_address']).replace('/128',''))
-        
-        for router, router_content in as_content['routers'].items():
+        if router_content["IGP"]=="RIP":
+            igp=0
+        else:
+            igp=1
+
+
+        if igp == 0:
+            #setup_rip_router(router)
+            config_string = ""
+            config_string = config_rip
+
+
+        elif igp == 1:
+            #setup_ospf_router(router_content['Router_ID'])
+            config_string = ""
+            config_string = setup_ospf(router_content['Router_ID'])
+
+        print(router)
+
+        for interface, interface_content in router_content['interfaces'].items():
 
             if igp == 0:
-                #setup_rip_router(router)
-                config_string = ""
-                config_string = config_rip
-
-
+                #setup_rip_interface(interface, interface_content['ipv6_address'])
+                config_string += ripconf(interface, interface_content['ipv6_address'] )
+                
             elif igp == 1:
-                #setup_ospf_router(router_content['Router_ID'])
-                config_string = ""
-                config_string = setup_ospf(router_content['Router_ID'])
-
-            print(router)
-
-            for interface, interface_content in router_content['interfaces'].items():
-
-                if igp == 0:
-                    #setup_rip_interface(interface, interface_content['ipv6_address'])
-                    config_string += ripconf(interface, interface_content['ipv6_address'] )
-                    
-                elif igp == 1:
-                    #setup_ospf_interface(interface, interface_content['ipv6_address], interface_content['ospf_area])
-                    config_string += ospfconf(interface, interface_content['ipv6_address'], (str(interface_content['ospf_area'])))
-                
-                print(config_string.encode())
-
-            ebgp = None
-
-            #conf bgp
-            if router_content['EBGP_Neighbor'] != None:
-                ebgp = (str(router_content['EBGP_Neighbor']['AS_number']), router_content['EBGP_Neighbor']['ipv6_address'])
+                #setup_ospf_interface(interface, interface_content['ipv6_address], interface_content['ospf_area])
+                config_string += ospfconf(interface, interface_content['ipv6_address'], (str(interface_content['ospf_area'])))
             
-            config_string += bgpconf(as_content['as_number'],router_content['Router_ID'],loopback_dict[as_name],ebgp, router_content['advertised_networks'])
 
-            telnet_to_node(config_string.encode(), nodes_info[router])
+        ebgp = None
+
+        #conf bgp
+        if router_content['EBGP_Neighbor'] != None:
+            ebgp = (str(router_content['EBGP_Neighbor']['AS_number']), router_content['EBGP_Neighbor']['ipv6_address'])
+        
+        config_string += bgpconf(as_number,router_content['Router_ID'],loopback_dict[as_number],ebgp, router_content['advertised_networks'])
+
+        print(config_string)
+
+        telnet_to_node(config_string.encode(), nodes_info[router])
                 
-print(loopback_dict)

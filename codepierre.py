@@ -13,7 +13,7 @@ def ospfconf(numero_router, router_id, interface, ospf_cost, adresse_ip, ospf_ar
     ospfstring = b"enable\rconf t\ripv6 unicast-routing\ripv6 router ospf " + numero_router + b"\r" + b"router-id " + router_id + b"\r" + b"exit\rinterface " + interface + b"\r" + b"ipv6 enable\ripv6 address " + adresse_ip + b"\r" + b"ipv6 ospf " + numero_router + b" area " + ospf_area + b"\r" + b"ip ospf cost " + ospf_cost + b"\r" b"no shutdown\r"
     return ospfstring
 
-print(ospfconf(b"0", b"0.0.0.0", b"GigabitEthernet 1/0", b"2001::0", b"0"))
+print(ospfconf(b"0", b"0.0.0.0", b"GigabitEthernet 1/0", b"100", b"2001::0", b"0"))
 
 
 def ibgpripconf(interface,adresse_ip,id_AS,router_id,loopback_neighbors):

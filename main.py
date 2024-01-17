@@ -58,7 +58,6 @@ def ospfconf(interface, adresseip, ospfarea):
 
 def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks):
     #ebgp est un tuple qui a comme element un as voisin + ip_voisin
-    id_AS = str(id_AS)
     bgp_string = "router bgp " + id_AS + "\rno bgp default ipv4-unicast\rbgp router-id " + router_id + "\r"
     
     for i in range (0,len(loopback_neighbors)):
@@ -95,7 +94,8 @@ import json
 import os
 
 
-
+"""with open('actual_state.json') as json_actual_state_file:
+    actual_state = json.load(json_actual_state_file)"""
 
 with open('intent_file.json') as json_file:
     data = json.load(json_file)
@@ -140,14 +140,14 @@ with open('intent_file.json') as json_file:
                 
             elif igp == 1:
                 #setup_ospf_interface(interface, interface_content['ipv6_address], interface_content['ospf_area])
-                config_string += ospfconf(interface, interface_content['ipv6_address'], (str(interface_content['ospf_area'])))
+                config_string += ospfconf(interface, interface_content['ipv6_address'], interface_content['ospf_area'])
             
 
         ebgp = None
 
         #conf bgp
         if router_content['EBGP_Neighbor'] != None:
-            ebgp = (str(router_content['EBGP_Neighbor']['AS_number']), router_content['EBGP_Neighbor']['ipv6_address'])
+            ebgp = (router_content['EBGP_Neighbor']['as_number'], router_content['EBGP_Neighbor']['ipv6_address'])
         
         config_string += bgpconf(as_number,router_content['Router_ID'],loopback_dict[as_number],ebgp, router_content['advertised_networks'])
 

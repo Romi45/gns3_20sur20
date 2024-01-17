@@ -47,13 +47,13 @@ def ripconf(interface,adresse_ip):
     return rip_string
 
 def setup_ospf(router_id):
-    #tested, works as expected
-    setup_ospf_string = "enable\rconf t\ripv6 unicast-routing\ripv6 router ospf 1\rrouter-id " + router_id + "\r" + "exit\r"
+    #to test
+    setup_ospf_string = "enable\rconf t\ripv6 unicast-routing\ripv6 router ospf 1\r" + "router-id " + router_id + "\r" + "exit\r"
     return setup_ospf_string
 
-def ospfconf(interface, adresseip, ospfarea):
-    #tested, works as expected
-    ospfstring = "interface " + interface + "\ripv6 enable\ripv6 address " + adresseip + "\rno shutdown\ripv6 ospf 1 area "+ ospfarea + "\rexit\r"
+def ospfconf(interface, adresse_ip, ospf_area, ospf_cost):
+    #to test
+    ospfstring = "interface " + interface + "\r" + "ipv6 enable\ripv6 address " + adresse_ip + "\r" + "ipv6 ospf 1 area " + ospf_area + "\r" + "ipv6 ospf cost " + ospf_cost + "\r" "no shutdown\r" + "exit\r"
     return ospfstring
 
 def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks):
@@ -81,7 +81,7 @@ def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks):
     return bgp_string
 
 
-retrieve_nodes("config_auto_projet")
+retrieve_nodes("projet2")
 print(nodes_info)
 
 
@@ -93,9 +93,6 @@ igp = 0 #vaut 0 pour RIP, 1 pour OSPF
 import json
 import os
 
-
-"""with open('actual_state.json') as json_actual_state_file:
-    actual_state = json.load(json_actual_state_file)"""
 
 with open('intent_file.json') as json_file:
     data = json.load(json_file)
@@ -140,7 +137,7 @@ with open('intent_file.json') as json_file:
                 
             elif igp == 1:
                 #setup_ospf_interface(interface, interface_content['ipv6_address], interface_content['ospf_area])
-                config_string += ospfconf(interface, interface_content['ipv6_address'], interface_content['ospf_area'])
+                config_string += ospfconf(interface, interface_content['ipv6_address'], interface_content['ospf_area'], interface_content['ospf_cost'])
             
 
         ebgp = None

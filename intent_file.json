@@ -52,7 +52,7 @@
         "advertised_networks":[],
         "Router_ID":"3.3.3.3",
         "EBGP_Neighbor":{
-            "AS_number":2,
+            "as_number":"2",
             "ipv6_address":"2001:0:1:3::2"
         }
     },
@@ -63,21 +63,21 @@
         "interfaces":{
             "GigabitEthernet2/0":{
                 "ipv6_address":"2001:0:2:1::1/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "GigabitEthernet3/0":{
                 "ipv6_address":"2001:0:1:3::2/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "Loopback0":{
                 "ipv6_address":"2001:db8::4/128",
-                "ospf_area":0
+                "ospf_area":"0"
             }
         },
         "advertised_networks":[],
         "Router_ID":"4.4.4.4",
         "EBGP_Neighbor":{
-            "AS_number":1,
+            "as_number":"1",
             "ipv6_address":"2001:0:1:3::1"
         }
     },        
@@ -87,15 +87,15 @@
         "interfaces":{
             "GigabitEthernet1/0":{
                 "ipv6_address":"2001:0:2:2::1/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "GigabitEthernet2/0":{
                 "ipv6_address":"2001:0:2:1::2/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "Loopback0":{
                 "ipv6_address":"2001:db8::5/128",
-                "ospf_area":0
+                "ospf_area":"0"
             }
         },
         "advertised_networks":[],
@@ -108,15 +108,15 @@
         "interfaces":{
             "GigabitEthernet1/0":{
                 "ipv6_address":"2001:0:2:2::1/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "GigabitEthernet2/0":{
                 "ipv6_address":"2001:0:2:4::1/64",
-                "ospf_area":0
+                "ospf_area":"0"
             },
             "Loopback0":{
                 "ipv6_address":"2001:db8::6/128",
-                "ospf_area":0
+                "ospf_area":"0"
             }
         },
         "advertised_networks":["2001:0:2:4::/64"],

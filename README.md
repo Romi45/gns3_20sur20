@@ -20,9 +20,9 @@ We therefore need to create a code that allows us to manipulate the consoles of 
 
 This is how our code works eventually :
 
-- We first retrieve the nodes of the GNS3 project.
+- We first retrieve the nodes local ports of the GNS3 project. In order to start a telnet connection to their consoles.
 - Then we scan the JSON `intent_file`, where every router of the network is precised, along with its IPv6 addresses, the type of protocol based on its neighbors and more.
-- Thanks to telnet and by running "if" tests we configure every router. For example, if the router's iBGP is set to OSPF in the `intent_file`, then the code calls the `setup_ospf` function to set the router to ospf, and then calls the `ospfconf_area` function to set up the OSPF area. There is a different setup function for all 3 protocols and situations, as well as for making the address plan of the network. A configuration of a random router in the `intent_file` can be seen in the image below.
+- Thanks to telnet and by running "if" tests we configure every router. For example, if the router's IGP is set to OSPF in the `intent_file`, then the code calls the `setup_ospf` function to set the router to ospf, and then calls the `ospfconf_area` function to set up the OSPF area. There is a different setup function for all 3 protocols and situations, as well as for making the address plan of the network. A configuration of a random router in the `intent_file` can be seen in the image below.
 
 ![Alt text](https://image.noelshack.com/fichiers/2024/05/2/1706629051-captura-de-pantalla-2024-01-30-163624.png)
 

@@ -46,4 +46,4 @@ Finally, we achieve to automate the setting of almost any network, as long as an
 
 ![Alt text](https://image.noelshack.com/fichiers/2024/05/2/1706629657-image.png)
 
-The results are satisfactory : the net work has been set up by our code.
+We find that the results are satisfactory and the software has automated the generation of router configuration.

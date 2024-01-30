@@ -35,7 +35,7 @@ Ultimately and as add-ins, we decided to implement some other caracteristics to 
 If the `intent_file` specifies it, OSPF cost can be set in order to influence the routing by calling the `ospfconf_cost` function. 
 
 #### Logs
-In order to avoid having to charge again the whole GNS3 project every time there is a change in a router configuration, we implemented logs. (Hippo)
+In order to affect changes of configuration in the `intent_file`, like a modification in an IPv6 address, we implemented logs. We keep track of the `intent_file` so that if there's a modification, we compare both the old and the new one, and then correct the change.
 
 #### Communities
 We also decided to implement BGP communities. (Jean)

@@ -7,6 +7,15 @@ import os
 nodes_info = {}
 config_rip = "ipv6 router rip 0\rredistribute connected\rexit\r"
 def telnet_to_node(config, port):
+    """
+    Uses telnet to send the configuration to the routers.
+    Args:
+        config (string) : the configuration to be sent to the router.
+        port (int) : the port of the router.
+    Returns:
+        0 if everything went right
+        -1 if an exception was raised
+    """
     try:
         tn = telnetlib.Telnet('localhost',port)
         time.sleep(1)
@@ -27,6 +36,14 @@ def telnet_to_node(config, port):
 
 
 def retrieve_nodes(project_name):
+    """
+    Retrieves all of the nodes informations from GNS3 through the 
+    gns3fy library.
+    Args:
+        project_name (str) : the name of the gns3 project
+    Returns:
+        None
+    """
 
     server = Gns3Connector("http://localhost:3080")
 
@@ -41,25 +58,73 @@ def retrieve_nodes(project_name):
 
 
 def setup_ospf(router_id):
+    """
+    Builds the OSPF setup string with the router ID.
+    Args:
+        router_id (str) : the OSPF router ID to be assigned.
+    Returns:
+        (string) the configuration string.
+    """
 
     return ("ipv6 router ospf 1\r" + "router-id " + router_id + "\r" + "exit\r")
 
 def ipv6(adresse_ip):
+    """
+    Builds the ipv6 addressing string.
+    Args:
+        adresse_ip (string) : the ipv6 address to be assigned.
+    Returns:
+        (string) : the configuration string.
+    """
     return("ipv6 address " + adresse_ip + "\r")
 
 def ripconf():
+    """
+    Builds the RIP setup string.
+    Args:
+        None
+    Returns:
+        (string) the configuration string.
+    """
 
     return ("ipv6 rip 0 enable\r")
 
 def ospfconf_area(ospf_area):
+    """
+    Builds the OSPF area setup string.
+    Args:
+        ospf_area (str) : the OSPF area number to be assigned.
+    Returns:
+        (string) the configuration string.
+    """
 
     return ("ipv6 ospf 1 area " + ospf_area + "\r")
 
 def ospfconf_cost(ospf_cost):
+    """
+    Builds the OSPF link cost string.
+    Args:
+        ospf_cost (str) : the OSPF link cost.
+    Returns:
+        (string) the configuration string.
+    """
     return("ipv6 ospf cost " + ospf_cost + "\r")
 
 
 def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks,type,neighbor_ipv6):
+    """
+    Builds the entire BGP configuration string.
+    Args:
+        id_AS (string) : the AS number.
+        router_id (string) : the router ID number.
+        loopback_neighbors (list) : a list of the loopback @ of the neighbors of the router.
+        ebgp (tuple) : contains the AS number and the @ of the EBGP neighbor
+        advertised_networks (list) : the networks to advertise through BGP
+        type (string) : the type of BGP neighbor (customer, peer, provider)
+        neighbor_ipv6 (string) : the ipv6 @ of the neighbor.
+    Returns:
+        bgp_string (string) : the bgp configuration string.
+    """
     #ebgp est un tuple qui a comme element un as voisin + ip_voisin
     bgp_string=""
     if type == "client":

@@ -61,13 +61,14 @@ def ospfconf_cost(ospf_cost):
 
 def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks,type,neighbor_ipv6):
     #ebgp est un tuple qui a comme element un as voisin + ip_voisin
+    bgp_string=""
     if type == "client":
         bgp_string = "route-map COSTUMER_RM_PERMIT permit 10\rset community 100:1789\rexit\r"
-        route_map = "route-map COSTUMER_RM_PERMIT in\rneighbor "+ neighbor_ipv6 +" route-map COSTUMER_RM_PERMIT in\r"
+        route_map = "neighbor "+ neighbor_ipv6 +" route-map COSTUMER_RM_PERMIT in\r"
 
     elif type == "provider" or type == "peer":
         bgp_string = "route-map COSTUMER_RM_DENY permit 10\rmatch community COSTUMER_CL\rexit\rroute-map COSTUMER_RM_DENY deny 20\rexit\rip community-list standard COSTUMER_CL permit 100:1789\r"
-        route_map = "route-map COSTUMER_RM_DENY out\rneighbor "+ neighbor_ipv6 +" route-map COSTUMER_RM_DENY out\r"
+        route_map = "neighbor "+ neighbor_ipv6 +" route-map COSTUMER_RM_DENY out\r"
     else:
         route_map = ""
     bgp_string += "router bgp " + id_AS + "\rno bgp default ipv4-unicast\rbgp router-id " + router_id + "\r"
@@ -77,7 +78,7 @@ def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks,type,n
     
     if ebgp:
         bgp_string += "\rneighbor " + ebgp[1] + " remote-as " + ebgp[0] + "\r"
-    bgp_string += "bgp community new-format\r"
+
     bgp_string += "address-family ipv6 unicast\r"
     bgp_string +=  route_map
 
@@ -155,7 +156,7 @@ with open('intent_file.json') as json_file:
 
         if router_content['EBGP_Neighbor'] != None:
             ebgp = (router_content['EBGP_Neighbor']['as_number'], router_content['EBGP_Neighbor']['ipv6_address'])
-            if router_content['EBGP_Neighbor']['type']:    
+            if 'type' in router_content['EBGP_Neighbor']:    
                 type = router_content['EBGP_Neighbor']['type']
                 neighbor_ipv6 = router_content['EBGP_Neighbor']['ipv6_address']
             else:

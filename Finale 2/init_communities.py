@@ -62,7 +62,7 @@ def ospfconf_cost(ospf_cost):
 def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks,type,neighbor_ipv6):
     #ebgp est un tuple qui a comme element un as voisin + ip_voisin
     if type == "client":
-        bgp_string = "route-map COSTUMER_RM_PERMIT permit 10\rset community 100:1789\r"
+        bgp_string = "route-map COSTUMER_RM_PERMIT permit 10\rset community 100:1789\rexit\r"
         route_map = "route-map COSTUMER_RM_PERMIT in\rneighbor "+ neighbor_ipv6 +" route-map COSTUMER_RM_PERMIT in\r"
 
     elif type == "provider" or type == "peer":
@@ -77,9 +77,9 @@ def bgpconf(id_AS,router_id,loopback_neighbors, ebgp, advertised_networks,type,n
     
     if ebgp:
         bgp_string += "\rneighbor " + ebgp[1] + " remote-as " + ebgp[0] + "\r"
-    
+    bgp_string += "bgp community new-format\r"
     bgp_string += "address-family ipv6 unicast\r"
-    bgp_string += "bgp community new-format\r" + route_map
+    bgp_string +=  route_map
 
     for i in range (0,len(loopback_neighbors)):
         bgp_string += "neighbor " + loopback_neighbors[i] + " activate\r"

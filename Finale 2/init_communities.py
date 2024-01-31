@@ -155,8 +155,12 @@ with open('intent_file.json') as json_file:
 
         if router_content['EBGP_Neighbor'] != None:
             ebgp = (router_content['EBGP_Neighbor']['as_number'], router_content['EBGP_Neighbor']['ipv6_address'])
-            type = router_content['EBGP_Neighbor']['type']
-            neighbor_ipv6 = router_content['EBGP_Neighbor']['ipv6_address']
+            if router_content['EBGP_Neighbor']['type']:    
+                type = router_content['EBGP_Neighbor']['type']
+                neighbor_ipv6 = router_content['EBGP_Neighbor']['ipv6_address']
+            else:
+                type = ""
+                neighbor_ipv6 = ""
             print(f"BGP neighbor type: {type}.")
         else:
             type = ""

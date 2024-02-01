@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
             print(f"Configuration de {router}")
 
-            config_string = "end\renable\rconf t\ripv6 unicast-routing\r"
+            config_string = "end\renable\rconf t\rip bgp-community new-format\ripv6 unicast-routing\r"
 
             if router_content["IGP"]=="RIP":
                 igp=0
@@ -72,4 +72,5 @@ if __name__ == "__main__":
             print(config_string)
 
             telnet_to_node(config_string.encode(), nodes_info[router])
-                
+            
+

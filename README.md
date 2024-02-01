@@ -41,8 +41,14 @@ It's important to note, our code is divided into two scripts. The first, init_co
 
 However, the logs do not account for BGP communities and local preference as we did not have time to implement these features. Similarly, they do not consider the addition or removal of routers, nor the addition or removal of interfaces on routers.
 
-#### Communities
-We also decided to implement BGP communities. (Jean)
+#### BGP Communities and Local-Pref
+We also decided to implement BGP communities. 
+
+To do so we apply a route-map in to our customer links in order to tag the routes shared through those links.
+
+On the provider/peer links, we apply a community-list that matches the costumer tag. We then apply a route-map out with a permit that matches our community list. This way, we share with our providers and peers only the routes that come from our costumers.
+
+We also implemented the possibilty to add a local-pref to a link.
 
 ### Reseting the routers
 In order to facilitate testing our codes on routers without initial configuration, we have implemented a script that removes the configuration from all routers in a GNS3 project. Here is how reset_all_routers.py works:

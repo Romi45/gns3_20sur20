@@ -35,7 +35,11 @@ Ultimately and as add-ins, we decided to implement some other caracteristics to 
 If the `intent_file` specifies it, OSPF cost can be set in order to influence the routing by calling the `ospfconf_cost` function. 
 
 #### Logs
-In order to affect changes of configuration in the `intent_file`, like a modification in an IPv6 address, we implemented logs. We keep track of the `intent_file` so that if there's a modification, we compare both the old and the new one, and then correct the change.
+To modify the router configurations without having to completely reset them, it was crucial to implement a logging system. Our strategy involved maintaining the current state of all routers by keeping the previous intent_file. This allows us to reconfigure only the elements that have changed between the last and current configuration.
+
+It's important to note, our code is divided into two scripts. The first, init_config.py, is designed to initialize all routers by sending all commands without concern for the previous state (assuming their configurations were blank prior to using this program). Then, the second script, update_config.py, relies on the differences between the two intent_files to send only the necessary modifications.
+
+However, the logs do not account for BGP communities and local preference as we did not have time to implement these features. Similarly, they do not consider the addition or removal of routers, nor the addition or removal of interfaces on routers.
 
 #### Communities
 We also decided to implement BGP communities. (Jean)

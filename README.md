@@ -40,7 +40,14 @@ In order to affect changes of configuration in the `intent_file`, like a modific
 #### Communities
 We also decided to implement BGP communities. (Jean)
 
+### Reseting the routers
+In order to facilitate testing our codes on routers without initial configuration, we have implemented a script that removes the configuration from all routers in a GNS3 project. Here is how reset_all_routers.py works:
 
+Close the GNS3 project and then run reset_all_routers.py.
+The code deletes all configuration files of the routers.
+Restart GNS3 and power on all routers. Wait until the "Do you want to enter initial configuration" menu appears.
+Press enter in the terminal of reset_all_routers.py to send "no" to all routers.
+There you go!
 
 Finally, we achieve to automate the setting of almost any network, as long as an `intent_file` clarifying the specificities of this network is given. We decided to use the following network as a test for a more complex topology : 
 

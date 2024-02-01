@@ -24,7 +24,7 @@ This is how our code works eventually :
 - Then we scan the JSON `intent_file`, where every router of the network is precised, along with its IPv6 addresses, the type of protocol based on its neighbors and more.
 - Thanks to telnet and by running "if" tests we configure every router. For example, if the router's IGP is set to OSPF in the `intent_file`, then the code calls the `setup_ospf` function to set the router to ospf, and then calls the `ospfconf_area` function to set up the OSPF area. There is a different setup function for all 3 protocols and situations, as well as for making the address plan of the network. A configuration of a random router in the `intent_file` can be seen in the image below.
 
-![Alt text](https://image.noelshack.com/fichiers/2024/05/2/1706629051-captura-de-pantalla-2024-01-30-163624.png)
+![Alt text](https://image.noelshack.com/fichiers/2024/05/4/1706783749-capture-d-ecran-du-2024-02-01-00-07-17.png)
 
 We can see that every router is represented in the JSON, along with its specificities (as_number, router-id...).
 
